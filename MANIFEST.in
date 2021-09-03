@@ -1,0 +1,2 @@
+include molgpka/models/*.pth
+include molgpka/utils/*.tsv

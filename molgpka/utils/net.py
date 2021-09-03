@@ -12,10 +12,13 @@ from torch_geometric.data import DataLoader
 n_features = 29
 hidden = 1024
 
+
 class GCNNet(torch.nn.Module):
     def __init__(self):
         super(GCNNet, self).__init__()
-        self.conv1 = GCNConv(n_features, 1024, cached=False) # if you defined cache=True, the shape of batch must be same!
+        self.conv1 = GCNConv(
+            n_features, 1024, cached=False
+        )  # if you defined cache=True, the shape of batch must be same!
         self.bn1 = BatchNorm1d(1024)
         self.conv2 = GCNConv(1024, 512, cached=False)
         self.bn2 = BatchNorm1d(512)
@@ -62,10 +65,13 @@ class GCNNet(torch.nn.Module):
         x = self.fc4(x)
         return x
 
+
 class GATNet(torch.nn.Module):
     def __init__(self):
         super(GATNet, self).__init__()
-        self.conv1 = GATConv(n_features, 1024, heads=1) # if you defined cache=True, the shape of batch must be same!
+        self.conv1 = GATConv(
+            n_features, 1024, heads=1
+        )  # if you defined cache=True, the shape of batch must be same!
         self.bn1 = BatchNorm1d(1024)
         self.conv2 = GATConv(1024, 512, heads=1)
         self.bn2 = BatchNorm1d(512)
@@ -101,14 +107,17 @@ class GATNet(torch.nn.Module):
         x = self.fc4(x)
         return x
 
+
 dim = 64
+
+
 class MPNNNet(torch.nn.Module):
     def __init__(self):
         super(MPNNNet, self).__init__()
         self.lin0 = torch.nn.Linear(n_features, dim)
 
         nn = Sequential(Linear(6, 128), ReLU(), Linear(128, dim * dim))
-        self.conv = NNConv(dim, dim, nn, aggr='mean')
+        self.conv = NNConv(dim, dim, nn, aggr="mean")
         self.gru = GRU(dim, dim)
 
         self.set2set = Set2Set(dim, processing_steps=3)
@@ -128,4 +137,3 @@ class MPNNNet(torch.nn.Module):
         out = F.relu(self.lin1(out))
         out = self.lin2(out)
         return out
-

@@ -9,9 +9,9 @@ from rdkit import Chem
 import os
 import pandas as pd
 
-# root = os.path.abspath(os.path.dirname(__file__))
-root = os.path.join(os.path.abspath(""), "utils")
+root = os.path.abspath(os.path.dirname(__file__))
 smarts_file = os.path.join(root, "smarts_pattern.tsv")
+
 
 def split_acid_base_pattern(smarts_file):
     df_smarts = pd.read_csv(smarts_file, sep="\t")
@@ -19,12 +19,14 @@ def split_acid_base_pattern(smarts_file):
     df_smarts_base = df_smarts[df_smarts.Acid_or_base == "B"]
     return df_smarts_acid, df_smarts_base
 
+
 def unique_acid_match(matches):
-    single_matches = list(set([m[0] for m in matches if len(m)==1]))
-    double_matches = [m for m in matches if len(m)==2]
+    single_matches = list(set([m[0] for m in matches if len(m) == 1]))
+    double_matches = [m for m in matches if len(m) == 2]
     single_matches = [[j] for j in single_matches]
     double_matches.extend(single_matches)
     return double_matches
+
 
 def match_acid(df_smarts_acid, mol):
     matches = []
@@ -49,6 +51,7 @@ def match_acid(df_smarts_acid, mol):
             matches_modify.append(j)
     return matches_modify
 
+
 def match_base(df_smarts_base, mol):
     matches = []
     for idx, name, smarts, index, acid_base in df_smarts_base.itertuples():
@@ -66,6 +69,7 @@ def match_base(df_smarts_base, mol):
             matches_modify.append(j)
     return matches_modify
 
+
 def get_ionization_aid(mol, acid_or_base=None):
     df_smarts_acid, df_smarts_base = split_acid_base_pattern(smarts_file)
 
@@ -80,7 +84,8 @@ def get_ionization_aid(mol, acid_or_base=None):
     else:
         return base_matches
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     mol = Chem.MolFromSmiles("CN(C)CCCN1C2=CC=CC=C2SC2=C1C=C(C=C2)C(C)=O")
     matches = get_ionization_aid(mol)
     print(matches)
