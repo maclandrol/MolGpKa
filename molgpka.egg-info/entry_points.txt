@@ -1,3 +1,0 @@
-[console_scripts]
-molgpka = molgpka.cli:main_cli
-
