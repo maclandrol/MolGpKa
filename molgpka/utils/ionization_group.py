@@ -59,9 +59,10 @@ def match_base(df_smarts_base, mol):
         match = mol.GetSubstructMatches(pattern)
         if len(match) == 0:
             continue
-        index = int(index)
+        index = [int(x) for x in index.split(",")]
         for m in match:
-            matches.append([m[index]])
+            for i in index:
+                matches.append([m[i]])
     matches = unique_acid_match(matches)
     matches_modify = []
     for i in matches:
